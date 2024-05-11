@@ -20,10 +20,10 @@
                     </div>
                     <h3 class="mb-4">Sign up</h3>
                     {% for field in form %}
-                    <div class="input-group mb-3">
-                        {{ field }}
-                    </div>
-                    <span class="text-danger d-block text-left">{{ field.errors }}</span>
+                        <div class="input-group mb-3">
+                            {{ field }}
+                        </div>
+                        <span class="text-danger d-block text-left">{{ field.errors }}</span>
                     {% endfor %}
                     <div class="form-group text-left mt-4">
                         <div class="checkbox checkbox-fill d-inline">

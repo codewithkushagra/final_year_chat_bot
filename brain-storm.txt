@@ -1,0 +1,42 @@
+apps:
+	> bot
+	> user
+	> dashboard
+	> ingestion
+
+models:
+	> company
+	> user(fk->company)
+	> customer
+	> conversation
+	> message
+	> bot	
+
+views:
+	> login/logout
+	> analytics dashboard
+	> ingestion
+	> user profile
+	> chat summirzation
+	> telegram interface
+
+django:
+	worker:
+		bot-> handle
+
+
+
+bot interaction
+gemeni script:
+	enter you text: what is you name?
+	gemeni: hi i am ..
+	enter: xyz
+	gemeni: hi, xyz
+	....
+
+
+storing conversation(qdrant) + langchain(conversation chaining) + embedding
+
+
+
+
