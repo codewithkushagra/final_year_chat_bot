@@ -1,9 +1,9 @@
-{% load i18n static admin_datta %}
+{% load static customtags %}
 
 <nav class="pcoded-navbar">
   <div class="navbar-wrapper">
     <div class="navbar-brand header-logo">
-      <a href="{% url 'index' %}" class="b-brand">
+      <a href="{% url 'dashboard:index' %}" class="b-brand">
         <div class="b-bg">
           <i class="feather icon-trending-up"></i>
         </div>
@@ -20,7 +20,7 @@
           {% if request.user.is_superuser %}
           <a href="{% url 'admin:index' %}" class="nav-link ">
           {% else %}
-          <a href="{% url 'index' %}" class="nav-link ">
+          <a href="{% url 'dashboard:index' %}" class="nav-link ">
           {% endif %}
             <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Dashboard</span>
           </a>
@@ -33,8 +33,8 @@
           <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
           <ul class="pcoded-submenu">
-            <li class=""><a href="{% url 'login' %}" class="">Sign IN</a></li>
-            <li class=""><a href="{% url 'register' %}" class="">Sign UP</a></li>
+            <li class=""><a href="{% url 'user:login' %}" class="">Sign IN</a></li>
+            <li class=""><a href="{% url 'user:register' %}" class="">Sign UP</a></li>
           </ul>
         </li>
         {% endif %}
@@ -79,15 +79,15 @@
           <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-box"></i></span><span class="pcoded-mtext">Components</span></a>
           <ul class="pcoded-submenu">
-            <li class="{% if 'button' in segment %}active{% endif %}"><a href="{% url 'bc_button' %}" class="">Button</a></li>
-            <li class="{% if 'badges' in segment %}active{% endif %}"><a href="{% url 'bc_badges' %}" class="">Badges</a></li>
-            <li class="{% if 'breadcrumbs_&_pagination' in segment %}active{% endif %}"><a href="{% url 'bc_breadcrumb_pagination' %}" class="">Breadcrumb & paggination</a></li>
-            <li class="{% if 'collapse' in segment %}active{% endif %}"><a href="{% url 'bc_collapse' %}" class="">Collapse</a></li>
-            <li class="{% if 'navs_&_tabs' in segment %}active{% endif %}"><a href="{% url 'bc_tabs' %}" class="">Tabs & pills</a></li>
-            <li class="{% if 'typography' in segment %}active{% endif %}"><a href="{% url 'bc_typography' %}" class="">Typography</a></li>
+            <li class="{% if 'button' in segment %}active{% endif %}"><a href="#" class="">Button</a></li>
+            <li class="{% if 'badges' in segment %}active{% endif %}"><a href="#" class="">Badges</a></li>
+            <li class="{% if 'breadcrumbs_&_pagination' in segment %}active{% endif %}"><a href="#" class="">Breadcrumb & paggination</a></li>
+            <li class="{% if 'collapse' in segment %}active{% endif %}"><a href="#" class="">Collapse</a></li>
+            <li class="{% if 'navs_&_tabs' in segment %}active{% endif %}"><a href="#" class="">Tabs & pills</a></li>
+            <li class="{% if 'typography' in segment %}active{% endif %}"><a href="#" class="">Typography</a></li>
 
 
-            <li class="{% if 'feather_icon' in segment %}active{% endif %}"><a href="{% url 'icon_feather' %}" class="">Feather<span
+            <li class="{% if 'feather_icon' in segment %}active{% endif %}"><a href="#" class="">Feather<span
                   class="pcoded-badge label label-danger">NEW</span></a></li>
           </ul>
         </li>
@@ -95,21 +95,21 @@
           <label>Forms & table</label>
         </li>
         <li data-username="form elements advance componant validation masking wizard picker select" class="nav-item {% if 'form_elements' in segment %}active{% endif %}">
-          <a href="{% url 'form_elements' %}" class="nav-link "><span class="pcoded-micon"><i
+          <a href="#" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-file-text"></i></span><span class="pcoded-mtext">Form elements</span></a>
         </li>
         <li data-username="Table bootstrap datatable footable" class="nav-item {% if 'basic_tables' in segment %}active{% endif %}">
-          <a href="{% url 'basic_tables' %}" class="nav-link "><span class="pcoded-micon"><i
+          <a href="#" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-server"></i></span><span class="pcoded-mtext">Table</span></a>
         </li>
         <li class="nav-item pcoded-menu-caption">
           <label>Chart & Maps</label>
         </li>
-        <li data-username="Charts Morris" class="nav-item {% if 'morris_chart' in segment %}active{% endif %}"><a href="{% url 'morris_chart' %}" class="nav-link "><span
+        <li data-username="Charts Morris" class="nav-item {% if 'morris_chart' in segment %}active{% endif %}"><a href="#" class="nav-link "><span
               class="pcoded-micon"><i class="feather icon-pie-chart"></i></span><span
               class="pcoded-mtext">Chart</span></a>
         </li>
-        <li data-username="Maps Google" class="nav-item {% if 'google_maps' in segment %}active{% endif %}"><a href="{% url 'google_maps' %}" class="nav-link "><span
+        <li data-username="Maps Google" class="nav-item {% if 'google_maps' in segment %}active{% endif %}"><a href="#" class="nav-link "><span
               class="pcoded-micon"><i class="feather icon-map"></i></span><span class="pcoded-mtext">Maps</span></a>
         </li>
         <li class="nav-item pcoded-menu-caption">
@@ -121,15 +121,15 @@
           <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
           <ul class="pcoded-submenu">
-            <li class=""><a href="{% url 'register' %}" class="" target="_blank">Sign up</a></li>
-            <li class=""><a href="{% url 'login' %}" class="" target="_blank">Sign in</a></li>
+            <li class=""><a href="{% url 'user:register' %}" class="" target="_blank">Sign up</a></li>
+            <li class=""><a href="{% url 'user:login' %}" class="" target="_blank">Sign in</a></li>
           </ul>
         </li>
-        <li data-username="Profile Page" class="nav-item {% if 'profile' in segment %}active{% endif %}"><a href="{% url 'profile' %}" class="nav-link"><span
+        <li data-username="Profile Page" class="nav-item {% if 'profile' in segment %}active{% endif %}"><a href="#" class="nav-link"><span
               class="pcoded-micon"><i class="feather icon-user"></i></span><span class="pcoded-mtext">Profile
               Page</span></a>
         </li>
-        <li data-username="Sample Page" class="nav-item {% if 'sample_page' in segment %}active{% endif %}"><a href="{% url 'sample_page' %}" class="nav-link"><span
+        <li data-username="Sample Page" class="nav-item {% if 'sample_page' in segment %}active{% endif %}"><a href="#" class="nav-link"><span
               class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext">Sample
               page</span></a>
         </li>
