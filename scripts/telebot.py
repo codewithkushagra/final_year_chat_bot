@@ -67,9 +67,9 @@ async def prompt_command(update: Update, context: Update):
 
 # Resoponses
 def handle_response(text: str) -> str:
-    processed: str = text.lower()
     
-    return 'Generating Response!'
+    conversation = convo.send_message(text)
+    return convo.last.text
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
