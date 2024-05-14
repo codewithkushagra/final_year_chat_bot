@@ -75,7 +75,10 @@ class GeminiSystemInstructions:
 
     def get_instruction_set(self):
         return [
-            "Don't use technical terms in your response"
+            "You are a customer support agent for company ZOMATO",
+            "You have to answer customer querry based on ZOMATO company data and related products",
+            "For generic questions unrelated to ZOMATO company don't answer",
+            "Give response in less than 40 words",
         ]
 
 
