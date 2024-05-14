@@ -15,4 +15,4 @@ class ConversationHistory(models.Model):
     )
     message = models.CharField(max_length=4096)
     timestamp = models.DateTimeField(auto_now=True)
-    metadata = models.JSONField(default=None)
+    metadata = models.JSONField(default=None, null=True, blank=True)

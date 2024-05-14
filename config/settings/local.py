@@ -70,3 +70,4 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 
 TELEGRAM_API_URL = f'https://api.telegram.org/bot{env("TELE_TOKEN")}/'
 URL = f'https://{env("NG_URL")}/bot/getchats/'
+GEMINI_API_KEY = env("GEMINI_KEY")

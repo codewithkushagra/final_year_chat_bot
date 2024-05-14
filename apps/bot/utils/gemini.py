@@ -1,4 +1,8 @@
+from loguru import logger
 import google.generativeai as genai
+
+from config.settings.local import GEMINI_API_KEY
+from apps.bot.models import ConversationHistory, ConversationRole
 
 
 class GeminiConfig:
@@ -66,10 +70,14 @@ class GeminiSafetySettings:
 
 
 class GeminiLLM:
+    DEFAULT_MESSAGE = "Sorry, I was unable to understand your text, please explain in detail."
+
     def __init__(self, model_name="gemini-1.5-pro-latest") -> None:
+        genai.configure(api_key=GEMINI_API_KEY)
         self.model_name = model_name
         self.model_configs = GeminiConfig().get_configs()
         self.model_safety_setting = GeminiSafetySettings().get_safety_settings()
+        self.model_init()
 
     def model_init(self):
         self.model = genai.GenerativeModel(
@@ -77,3 +85,26 @@ class GeminiLLM:
             generation_config=self.model_configs,
             safety_settings=self.model_safety_setting,
         )
+
+    def get_conversation_history(self, chat_id):
+        history = ConversationHistory.objects.filter(chat_id=chat_id).values(
+            "message", "role"
+        ).order_by("-timestamp")[:10]
+        return [
+            {
+                "parts": [item.get("message")],
+                "role": ConversationRole(item.get("role")).label,
+            }
+            for item in reversed(history)
+        ]
+
+    def generate_response(self, chat_id, user_text):
+        conversation = self.model.start_chat(
+            history=self.get_conversation_history(chat_id=chat_id)
+        )
+        try:
+            result = conversation.send_message(user_text)
+            return result._result.candidates[0].content.parts[0].text
+        except Exception as e:
+            logger.info(e)
+            return self.DEFAULT_MESSAGE
