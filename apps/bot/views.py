@@ -3,8 +3,9 @@ import requests
 
 from loguru import logger
 
-from django.http import HttpResponse
 from django.views import View
+from django.views import generic
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
@@ -46,3 +47,8 @@ class SetWebhookView(View):
     def get(self, request, *args, **kwargs):
         response = requests.post(f"{TELEGRAM_API_URL}setWebhook?url={URL}").json()
         return HttpResponse(f"{response}")
+
+
+
+class TelegramBotIntegration(generic.TemplateView):
+    template_name = "pages/integrations/telegram.html"
