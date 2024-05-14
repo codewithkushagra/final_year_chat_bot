@@ -69,6 +69,19 @@ class GeminiSafetySettings:
         return self.safety_settings
 
 
+class GeminiSystemInstructions:
+    def __init__(self, system_instruction=[]) -> None:
+        self.system_instruction = self._get_instruction_set()
+
+    def _get_instruction_set(self):
+        return [
+            "Don't use technical terms in your response"
+        ]
+
+    def get_system_instruction(self):
+        return vars(self)
+
+
 class GeminiLLM:
     DEFAULT_MESSAGE = "Sorry, I was unable to understand your text, please explain in detail."
 
@@ -77,6 +90,7 @@ class GeminiLLM:
         self.model_name = model_name
         self.model_configs = GeminiConfig().get_configs()
         self.model_safety_setting = GeminiSafetySettings().get_safety_settings()
+        self.system_instruction = GeminiSystemInstructions().get_system_instruction()
         self.model_init()
 
     def model_init(self):
@@ -84,6 +98,7 @@ class GeminiLLM:
             model_name=self.model_name,
             generation_config=self.model_configs,
             safety_settings=self.model_safety_setting,
+            system_instruction=self.system_instruction,
         )
 
     def get_conversation_history(self, chat_id):
