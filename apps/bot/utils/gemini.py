@@ -71,15 +71,12 @@ class GeminiSafetySettings:
 
 class GeminiSystemInstructions:
     def __init__(self, system_instruction=[]) -> None:
-        self.system_instruction = self._get_instruction_set()
+        self.system_instruction = self.get_instruction_set()
 
-    def _get_instruction_set(self):
+    def get_instruction_set(self):
         return [
             "Don't use technical terms in your response"
         ]
-
-    def get_system_instruction(self):
-        return vars(self)
 
 
 class GeminiLLM:
@@ -90,7 +87,7 @@ class GeminiLLM:
         self.model_name = model_name
         self.model_configs = GeminiConfig().get_configs()
         self.model_safety_setting = GeminiSafetySettings().get_safety_settings()
-        self.system_instruction = GeminiSystemInstructions().get_system_instruction()
+        self.system_instruction = GeminiSystemInstructions().get_instruction_set()
         self.model_init()
 
     def model_init(self):
