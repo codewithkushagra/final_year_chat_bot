@@ -44,7 +44,8 @@ DJANGO_APPS = [
     "django.contrib.admin",
     "django.forms",
     "apps.user",
-    "apps.customtags"
+    "apps.customtags",
+    "apps.bot"
 ]
 
 THIRD_PARTY_APPS = []

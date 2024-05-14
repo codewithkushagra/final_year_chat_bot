@@ -25,7 +25,6 @@ django:
 		bot-> handle
 
 
-
 bot interaction
 gemeni script:
 	enter you text: what is you name?
@@ -36,7 +35,3 @@ gemeni script:
 
 
 storing conversation(qdrant) + langchain(conversation chaining) + embedding
-
-
-
-
