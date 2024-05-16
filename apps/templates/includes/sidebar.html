@@ -16,6 +16,7 @@
         <li class="nav-item pcoded-menu-caption">
           <label>Navigation</label>
         </li>
+        
         <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item {% if 'index' in segment %}active{% endif %}">
           {% if request.user.is_superuser %}
           <a href="{% url 'admin:index' %}" class="nav-link ">
@@ -23,6 +24,12 @@
           <a href="{% url 'dashboard:index' %}" class="nav-link ">
           {% endif %}
             <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="{% if 'button' in segment %}active{% endif %}">
+          <a href="{% url 'bot:ingest_data' %}" class="">
+          <span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span class="pcoded-mtext">Data Ingestion</span>
           </a>
         </li>
 
@@ -80,7 +87,8 @@
                 class="feather icon-box"></i></span><span class="pcoded-mtext">Integrations</span></a>
           <ul class="pcoded-submenu">
             <li class="{% if 'button' in segment %}active{% endif %}"><a href="{% url 'bot:telegram_integration' %}" class="">Telegram</a></li>
-            <li class="{% if 'badges' in segment %}active{% endif %}"><a href="#" class="">Whatsapp</a></li>
+            {% comment %} <li class="{% if 'button' in segment %}active{% endif %}"><a href="{% url 'bot:ingest_data' %}" class="">Data Ingestion</a></li> {% endcomment %}
+            {% comment %} <li class="{% if 'badges' in segment %}active{% endif %}"><a href="#" class="">Whatsapp</a></li> {% endcomment %}
         </li>
         {% endif %}
       </ul>

@@ -51,4 +51,10 @@ class SetWebhookView(View):
 
 
 class TelegramBotIntegration(generic.TemplateView):
-    template_name = "pages/integrations/telegram.html"
+    template_name = "pages/integrations/telegram/telegram.html"
+
+class ManageTelegramBot(generic.TemplateView):
+    template_name = "pages/integrations/telegram/create_bot.html"
+
+class IngestData(generic.TemplateView):
+    template_name = "pages/integrations/data_ingestion/data_ingestion.html"
