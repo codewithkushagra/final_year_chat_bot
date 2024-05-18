@@ -1,6 +1,14 @@
-def message_to_conversation_history_user(message, role):
+def message_to_conversation_history(message):
     mapped_data = {
         "chat_id": message["message"]["chat"]["id"],
+        "username": message["message"]["from"]["username"]
+    }
+    return mapped_data
+
+
+def tele_user_message_to_message_model(message, conversation_history, role):
+    mapped_data = {
+        "conversation_history_id": conversation_history.id,
         "message_id": message["message"]["message_id"],
         "username": message["message"]["from"]["username"],
         "role": role,
@@ -10,9 +18,9 @@ def message_to_conversation_history_user(message, role):
     return mapped_data
 
 
-def message_to_conversation_history_model(message, response, role):
+def tele_model_message_to_message_model(message, conversation_history, response, role):
     mapped_data = {
-        "chat_id": message["message"]["chat"]["id"],
+        "conversation_history_id": conversation_history.id,
         "username": "bot",
         "role": role,
         "message": response,

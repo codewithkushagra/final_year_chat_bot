@@ -41,8 +41,12 @@ EMAIL_USE_SSL = False
 
 # Celery
 # ------------------------------------------------------------------------------
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/"
-CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_BROKER_URL = f"pyamqp://{env('MQ_USER')}:{env('MQ_PASS')}@localhost:5672/"
+CELERY_RESULT_BACKEND = f"rpc://{env('MQ_USER')}:{env('MQ_PASS')}@localhost:5672/"
+CELERY_RESULT_EXTENDED = True
+CELERY_RESULT_BACKEND_ALWAYS_RETRY = True
+CELERY_RESULT_BACKEND_MAX_RETRIES = 10
+CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
@@ -71,3 +75,4 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 TELEGRAM_API_URL = f'https://api.telegram.org/bot{env("TELE_TOKEN")}/'
 URL = f'https://{env("NG_URL")}/bot/getchats/'
 GEMINI_API_KEY = env("GEMINI_KEY")
+EMBEDDING_MODEL = "models/embedding-001"
