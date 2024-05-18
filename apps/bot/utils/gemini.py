@@ -1,11 +1,17 @@
 from loguru import logger
 import google.generativeai as genai
 
-from config.settings.local import GEMINI_API_KEY
-from apps.bot.models import ConversationHistory, ConversationRole
+from config.settings.local import GEMINI_API_KEY, EMBEDDING_MODEL
+from apps.bot.models import Message, ConversationRole
 
 
 class GeminiConfig:
+    RETRIEVAL_QUERY = "retrieval_query"
+    RETRIEVAL_DOCUMENT = "retrieval_document"
+    SEMANTIC_SIMILARITY = "semantic_similarity"
+    CLASSIFICATION = "classification"
+    CLUSTERING = "clustering"
+
     def __init__(
         self, temperature=1, top_p=0.95, top_k=0, max_output_tokens=4096
     ) -> None:
@@ -15,7 +21,12 @@ class GeminiConfig:
         self.max_output_tokens = max_output_tokens
 
     def get_configs(self):
-        return vars(self)
+        return {
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+            "top_k": self.top_k,
+            "max_output_tokens": self.max_output_tokens,
+        }
 
 
 class GeminiSafetySettings:
@@ -83,7 +94,9 @@ class GeminiSystemInstructions:
 
 
 class GeminiLLM:
-    DEFAULT_MESSAGE = "Sorry, I was unable to understand your text, please explain in detail."
+    DEFAULT_MESSAGE = (
+        "Sorry, I was unable to understand your text, please explain in detail."
+    )
 
     def __init__(self, model_name="gemini-1.5-pro-latest") -> None:
         genai.configure(api_key=GEMINI_API_KEY)
@@ -102,9 +115,13 @@ class GeminiLLM:
         )
 
     def get_conversation_history(self, chat_id):
-        history = ConversationHistory.objects.filter(chat_id=chat_id).values(
-            "message", "role"
-        ).order_by("-timestamp")[:10]
+        logger.info(chat_id)
+        history = (
+            Message.objects.filter(conversation_history__chat_id=chat_id)
+            .values("message", "role")
+            .order_by("-timestamp")[:10]
+        )
+        logger.info(history)
         return [
             {
                 "parts": [item.get("message")],
@@ -114,6 +131,7 @@ class GeminiLLM:
         ]
 
     def generate_response(self, chat_id, user_text):
+        logger.info(self.get_conversation_history(chat_id=chat_id))
         conversation = self.model.start_chat(
             history=self.get_conversation_history(chat_id=chat_id)
         )
@@ -123,3 +141,19 @@ class GeminiLLM:
         except Exception as e:
             logger.info(e)
             return self.DEFAULT_MESSAGE
+
+    @staticmethod
+    def generate_embeddings(text=None, task_type=GeminiConfig.SEMANTIC_SIMILARITY):
+        genai.configure(api_key=GEMINI_API_KEY)
+        try:
+            if text:
+                return genai.embed_content(
+                    model=EMBEDDING_MODEL,
+                    content=text,
+                    task_type=task_type,
+                )["embedding"]
+            logger.info("Empty string passed for generating embedding")
+            return []
+        except Exception as e:
+            logger.info(f"Error: {e}")
+            return []
