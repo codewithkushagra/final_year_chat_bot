@@ -20,7 +20,6 @@ class TelegramBotView(CSRFExemptMixin, View):
     def post(self, request, *args, **kwargs):
         bot_id = kwargs.get("id")
         message = json.loads(request.body.decode("utf-8"))
-        print(message)
         process = ConversationProcessing.objects.create(message_data=message)
         generate_and_send_response.delay(process.id, bot_id)
         return HttpResponse("ok")

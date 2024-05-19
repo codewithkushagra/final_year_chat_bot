@@ -1,8 +1,12 @@
 from loguru import logger
 import google.generativeai as genai
+from qdrant_client import QdrantClient
 
 from config.settings.local import GEMINI_API_KEY, EMBEDDING_MODEL
 from apps.bot.models import Message, ConversationRole
+
+QDRANTDB_HOST = "localhost"
+QDRANTDB_PORT = 6333
 
 
 class GeminiConfig:
@@ -86,9 +90,9 @@ class GeminiSystemInstructions:
 
     def get_instruction_set(self):
         return [
-            "You are a customer support agent for company Swiggy",
-            "You have to answer customer querry based on Swiggy company data and related products",
-            "For generic questions unrelated to Swiggy company don't answer",
+            "You are a customer support agent for company ZOMATO",
+            "You have to answer customer querry based on ZOMATO company data and related products",
+            "For generic questions unrelated to ZOMATO company don't answer",
             "Give response in less than 40 words",
         ]
 
@@ -114,26 +118,36 @@ class GeminiLLM:
             system_instruction=self.system_instruction,
         )
 
-    def get_conversation_history(self, chat_id):
+    def get_conversation_history(self, chat_id, user_text):
         logger.info(chat_id)
         history = (
             Message.objects.filter(conversation_history__chat_id=chat_id)
             .values("message", "role")
             .order_by("-timestamp")[:10]
         )
-        logger.info(history)
-        return [
+        client = QdrantClient(host=QDRANTDB_HOST, port=QDRANTDB_PORT)
+        embedding = GeminiLLM.generate_embeddings(text=user_text)
+        search_result = client.search(
+            collection_name="zomato_vector", query_vector=embedding, limit=2
+        )
+        results = [
+            {"parts": result.payload.get("data"), "role": "model"}
+            for result in search_result
+        ]
+        history = [
             {
                 "parts": [item.get("message")],
                 "role": ConversationRole(item.get("role")).label,
             }
             for item in reversed(history)
         ]
+        history = results + history
+        logger.info(history)
+        return history
 
     def generate_response(self, chat_id, user_text):
-        logger.info(self.get_conversation_history(chat_id=chat_id))
         conversation = self.model.start_chat(
-            history=self.get_conversation_history(chat_id=chat_id)
+            history=self.get_conversation_history(chat_id=chat_id, user_text=user_text)
         )
         try:
             result = conversation.send_message(user_text)
