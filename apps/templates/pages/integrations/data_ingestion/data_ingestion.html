@@ -2,52 +2,58 @@
 {% load static %}
 
 {% block content %}
-
-  <div class="container">
+<div class="container">
     <div class="row justify-content-between align-items-center">
-      <!-- Page Header on the left -->
-      <div class="col-md">
-        <div class="page-header">
-          <div class="page-block">
-            <div class="row align-items-center">
-              <div class="col">
-                <div class="page-header-title">
-                  <h5 class="m-b-10">{{ segment }}</h5>
+        <!-- Page Header on the left -->
+        <div class="col-md">
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">{{ segment }}</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}"><i class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="javascript:"></a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <ul class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}"><i class="feather icon-home"></i></a></li>
-                  <li class="breadcrumb-item"><a href="javascript:"></a></li>
-                </ul>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div class="col-sm-12">
-    <div class="card">
-      <div class="card-header">
-        <h5>Ingest Data</h5>
-      </div>
-        <div class='m-15'>
-            <div class="input-group">
-                <input type="text" class="form-control"
-                  aria-label="Text input with segmented dropdown button">
-                <div class="input-group-append">
-                  <button type="button" class="btn btn-primary">Submit</button>
-                  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
-                      class="sr-only">Toggle Dropdown</span></button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#!">Open Files</a>
-                  </div>
+    <!-- Display success or error messages -->
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+    {% elif success_message %}
+    <div class="alert alert-success" role="alert">
+        {{ success_message }}
+    </div>
+    {% endif %}
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Ingest Data</h5>
+            </div>
+            <form method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class='m-15'>
+                    <div class="input-group">
+                        <textarea class="form-control" name="text" rows="10"></textarea>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <label class="btn btn-primary" for="formFile" style="margin-left: 10px;">Choose File</label>
+                        <input class="form-control form-control-sm" name="file" type="file" id="formFile" style="display: none;">
+                    </div>
                 </div>
-              </div>    
+            </form>
         </div>
     </div>
-  </div> 
 </div>
-
 {% endblock content %}
