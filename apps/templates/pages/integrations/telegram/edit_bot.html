@@ -1,0 +1,117 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-between align-items-center">
+      <!-- Page Header on the left -->
+      <div class="col-md">
+        <div class="page-header">
+          <div class="page-block">
+            <div class="row align-items-center">
+              <div class="col">
+                <div class="page-header-title">
+                  <h5 class="m-b-10">{{ segment }}</h5>
+                </div>
+                <ul class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}"><i class="feather icon-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'bot:bot_list' %}">Telegram</a></li>
+                  <li class="breadcrumb-item">Create Bot<a href="javascript:"></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+          <div class="card-header">
+              <h5>Create Project</h5>
+          </div>
+          <div class="card-body">
+              <div class="row">
+                  <div class="col-md-6">
+                      <form method='POST' id='myForm'>
+                          {% csrf_token %}
+                          {% include 'includes/modal.html' %}  
+                          <div class="form-group">
+                              <label for="exampleInputProject1">Bot Name</label>
+                              {{ form.bot_name }}
+                          </div>
+                          <div class="form-group">
+                              <label for="exampleInputPassword1">Bot Username</label>
+                              {{ form.bot_username }}
+                          </div>
+                          <div class="form-group">
+                              <label for="exampleInputPassword1">Bot URL</label>
+                              {{ form.bot_url }}
+                          </div>
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                      </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Bot Token</label>
+                              {{ form.bot_token }}
+                          </div>
+                        </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+        $("#datepicker1").datetimepicker({
+            format: 'd/m/Y H:i',
+          });
+      });
+      $(function () {
+        $("#datepicker2").datetimepicker({
+            format: 'd/m/Y H:i',
+          });
+      });
+      $(document).ready(function() {
+        $('#myForm').submit(function(event) {
+          event.preventDefault();
+          var formData = $(this).serialize();
+          $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: formData,
+            success: function(data) {
+              if (data.success) {
+                $('#successModal').modal('show');
+              }
+            },
+            error: function() {
+              alert('An error occurred while saving the data.');
+            }
+          });
+        });
+      });
+      $(document).ready(function () {
+        $("#okbtn").click(function () {
+            $.ajax({
+                success: function() {
+                    window.location.href = '/projects/list/';
+                }
+            });
+        });
+    });
+</script>
+{% endblock javascripts %}
