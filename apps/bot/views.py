@@ -6,7 +6,7 @@ from loguru import logger
 from django.views import View
 from django.views import generic
 from django.urls import reverse_lazy
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.utils.utils import CSRFExemptMixin, SideBarSelectedMixin
@@ -84,3 +84,28 @@ class CreateTelegramBot(LoginRequiredMixin, SideBarSelectedMixin, generic.FormVi
             return super().form_valid(form)
         else:
             return super().form_invalid(form)
+
+
+class UpdateTelegramBotView(LoginRequiredMixin, SideBarSelectedMixin, generic.UpdateView):
+    template_name = "pages/integrations/telegram/edit_bot.html"
+    model = Bot
+    form_class = BotForm
+    parent = "bot"
+    segment = "bot_list"
+    pk_url_kwarg = "id"
+    success_url = reverse_lazy("bot:bot_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateTelegramBotView, self).get_context_data(**kwargs)
+        context["parent"] = self.parent
+        context["segment"] = self.segment
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.form_class(request.POST, instance=self.object)
+        if form.is_valid():
+            bot = form.save(user=request.user)
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return self.form_invalid(form)

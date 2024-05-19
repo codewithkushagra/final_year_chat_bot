@@ -63,9 +63,9 @@
                                   <td>{{ bot.bot_username }}</td>
                                   <td>{{ bot.bot_url }}</td>
                                   <td>
-                                    <a href="#">
+                                    <a href="{% url 'bot:edit_bot' bot.id %}">
                                         <button type="button" class="btn btn-primary py-1 px-2" title="View Bot Details" data-toggle="tooltip">
-                                            View
+                                            Edit
                                         </button>
                                     </a> 
                                 </td>

@@ -5,6 +5,7 @@ from .views import (
     SetWebhookView,
     TelegramBotIntegration,
     CreateTelegramBot,
+    UpdateTelegramBotView
 )
 
 app_name = "bot"
@@ -14,4 +15,5 @@ urlpatterns = [
     path("setwebhook/<int:id>/", SetWebhookView.as_view(), name="setwebhook"),
     path("telegram/", TelegramBotIntegration.as_view(), name="bot_list"),
     path("telegram/create/", CreateTelegramBot.as_view(), name="create_bot"),
+    path("edit/<int:id>", UpdateTelegramBotView.as_view(), name="edit_bot")
 ]

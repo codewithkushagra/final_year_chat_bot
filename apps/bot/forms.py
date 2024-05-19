@@ -27,7 +27,9 @@ class BotForm(forms.ModelForm):
 
     def save(self, commit=True, *args, **kwargs):
         bot = super().save(commit=False)
+        print("jjjjkakskjnska", kwargs.get("user", None))
         bot.user = kwargs.get("user", None)
+        print(bot.user)
         if commit:
             bot.save()
         return bot
