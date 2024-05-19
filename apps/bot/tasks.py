@@ -10,6 +10,7 @@ from .models import (
     ConversationHistory,
     ConversationProcessingStatus,
     Message,
+    Bot,
 )
 from .utils.mapper import (
     message_to_conversation_history,
@@ -23,16 +24,17 @@ from .utils.gemini import GeminiLLM
 logger = logging.getLogger(__name__)
 
 
-def send_generated_reply(method, data):
-    logger.info(f"sending message: {data}" )
-    return requests.post(TELEGRAM_API_URL + method, data)
+def send_generated_reply(method, data, bot_id):
+    logger.info(f"sending message: {data}")
+    bot = Bot.objects.get(id=bot_id)
+    return requests.post(f"{TELEGRAM_API_URL}{bot.bot_token}/" + method, data)
 
 
 @shared_task()
-def generate_and_send_response(process_id):
+def generate_and_send_response(process_id, bot_id):
     process = ConversationProcessing.objects.get(id=process_id)
     message = process.message_data
-    data = message_to_conversation_history(message)
+    data = message_to_conversation_history(message, bot_id)
 
     conversation_history, _ = ConversationHistory.objects.get_or_create(**data)
     model_message_data = tele_user_message_to_message_model(
@@ -55,6 +57,7 @@ def generate_and_send_response(process_id):
                 "chat_id": conversation_history.chat_id,
                 "text": response,
             },
+            bot_id,
         )
         process.processing_status = ConversationProcessingStatus.COMPLETED
         process.save()

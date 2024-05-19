@@ -27,8 +27,8 @@
           </a>
         </li>
 
-        <li class="{% if 'button' in segment %}active{% endif %}">
-          <a href="{% url 'bot:ingest_data' %}" class="">
+        <li class="{% if 'ingest_data' in segment %}active{% endif %}">
+          <a href="{% url 'ingest:ingest_data' %}" class="">
           <span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span class="pcoded-mtext">Data Ingestion</span>
           </a>
         </li>
@@ -82,11 +82,11 @@
         </li>
         <li
           data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds"
-          class="nav-item pcoded-hasmenu {% if 'basic_components' in parent %}active pcoded-trigger{% endif %}">
+          class="nav-item pcoded-hasmenu {% if 'bot' in parent %}active pcoded-trigger{% endif %}">
           <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-box"></i></span><span class="pcoded-mtext">Integrations</span></a>
           <ul class="pcoded-submenu">
-            <li class="{% if 'button' in segment %}active{% endif %}"><a href="{% url 'bot:telegram_integration' %}" class="">Telegram</a></li>
+            <li class="{% if 'bot_list' in segment %}active{% endif %}"><a href="{% url 'bot:bot_list' %}" class="">Telegram</a></li>
             {% comment %} <li class="{% if 'button' in segment %}active{% endif %}"><a href="{% url 'bot:ingest_data' %}" class="">Data Ingestion</a></li> {% endcomment %}
             {% comment %} <li class="{% if 'badges' in segment %}active{% endif %}"><a href="#" class="">Whatsapp</a></li> {% endcomment %}
         </li>
