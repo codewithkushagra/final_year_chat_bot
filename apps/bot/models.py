@@ -1,5 +1,36 @@
 from django.db import models
 
+from apps.user.models import User
+
+
+class BotPlatform(models.TextChoices):
+    TELEGRAM = ("TELE", "Telegram")
+
+
+class BotStatus(models.TextChoices):
+    INACTIVE = ("inactive", "In Active")
+    ACTIVE = ("active", "Active")
+    FAILED = ("failed", "Failed")
+
+
+class Bot(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, default=None, null=True, blank=True
+    )
+    bot_token = models.CharField(max_length=4096)
+    bot_type = models.CharField(
+        max_length=8, choices=BotPlatform.choices, default=BotPlatform.TELEGRAM
+    )
+    bot_username = models.CharField(
+        max_length=1024, default=None, null=True, blank=True
+    )
+    bot_name = models.CharField(max_length=4096, default=None, null=True, blank=True)
+    bot_url = models.CharField(max_length=4096, default=None, null=True, blank=True)
+    status = models.CharField(
+        max_length=8, choices=BotStatus.choices, default=BotStatus.INACTIVE
+    )
+    created_at = models.DateTimeField(auto_now=True)
+
 
 class ConversationRole(models.TextChoices):
     USER = ("usr", "user")
@@ -9,6 +40,9 @@ class ConversationRole(models.TextChoices):
 class ConversationHistory(models.Model):
     chat_id = models.CharField(max_length=1024, null=True, blank=True)
     username = models.CharField(max_length=1024, null=True, blank=True)
+    bot = models.ForeignKey(
+        Bot, on_delete=models.CASCADE, default=None, null=True, blank=True
+    )
     timestamp = models.DateTimeField(auto_now=True)
 
 
@@ -46,12 +80,3 @@ class ConversationProcessing(models.Model):
         blank=True,
         default=None,
     )
-
-
-class BotPlatform(models.TextChoices):
-    TELEGRAM = ("TELE", "Telegram")
-
-
-class Bot(models.Model):
-    bot_token = models.CharField(max_length=4096)
-    bot_type = models.CharField()

@@ -1,6 +1,7 @@
-def message_to_conversation_history(message):
+def message_to_conversation_history(message, bot_id):
     mapped_data = {
         "chat_id": message["message"]["chat"]["id"],
+        "bot_id": bot_id,
         "username": message["message"]["from"]["username"]
     }
     return mapped_data

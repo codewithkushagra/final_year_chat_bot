@@ -25,8 +25,8 @@
 
       <!-- Button on the right -->
       <div class="col-md-auto">
-        <a href="{% url 'bot:manage_bot' %}">
-          <button type="button" class="btn btn-primary" href='manage_bot.html' title="Manage all your Bots here."
+        <a href="{% url 'bot:create_bot' %}">
+          <button type="button" class="btn btn-primary" title="Create Bot"
               data-toggle="tooltip">Create Bot</button>
           </a>
       </div>
@@ -46,63 +46,108 @@
                   <thead>
                       <tr>
                           <th>#</th>
-                          <th>Business Name</th>
-                          <th>Group</th>
-                          <th>PAN</th>
-                          <th>Business Type</th>
-                          <th>Action</th>
+                          <th>Bot Name</th>
+                          <th>Username</th>
+                          <th>URL</th>
+                          <th>Details</th>
+                          <th>Status</th>
                       </tr>
                   </thead>
                   <tbody>
-                      {% for business in businesses %}
+                      {% for bot in bot_list %}
                       <a href="#">
                           <tr style="color:black;">
                                   {% include 'includes/modal.html' %}
                                   <th scope="row">{{ forloop.counter }}</th>
-                                  <td>{{ business.business_name }}</td>
-                                  <td>{{ business.group }}</td>
-                                  <td>{{ business.pan }}</td>
-                                  <td>{{ business.get_business_type_display }}</td>
+                                  <td>{{ bot.bot_name }}</td>
+                                  <td>{{ bot.bot_username }}</td>
+                                  <td>{{ bot.bot_url }}</td>
                                   <td>
-                                      <a href="{% url 'clients:update_business' business.id %}">
-                                          <button type="button" class="btn btn-primary py-1 px-2" title="Edit Buisness" data-toggle="tooltip">
-                                              Edit
-                                          </button>
-                                      </a> 
-                                  </td>
+                                    <a href="#">
+                                        <button type="button" class="btn btn-primary py-1 px-2" title="View Bot Details" data-toggle="tooltip">
+                                            View
+                                        </button>
+                                    </a> 
+                                </td>
+                                  {% if bot.status == 'inactive' %}
+                                    <td>
+                                      <button type="button" class="btn btn-primary py-1 px-2" onclick="activateWebhook({{ bot.id }})" title="View Bot Details" data-toggle="tooltip">
+                                          Activate
+                                      </button>
+                                    </td>
+                                  {% endif %}
+                                  {% if bot.status == 'active' %}
+                                    <td>
+                                        <a href="#">
+                                            <button type="button" class="btn btn-primary py-1 px-2" title="View Bot Details" data-toggle="tooltip">
+                                                Deactivate
+                                            </button>
+                                        </a> 
+                                    </td>
+                                  {% endif %}
                           </tr>
                       </a>
                       {% endfor %}
                   </tbody>
               </table>
               <div style="display: flex; justify-content: flex-end;" class="mx-4">
-              <nav aria-label="...">
-                  <ul class="pagination">
-                      {% if page_obj.has_previous %}
-                          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span><span class="sr-only">Previous</span></a></li>
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-end">
+                    {% if page_obj.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                          <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                      {% if page_obj.number == num %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
                       {% endif %}
-          
-                      {% for page_num in paginator_range %}
-                        {% if page_num == "…" %}
-                          <li class="page-item {% if page_num == page_obj.number %} disabled {% endif %}">
-                              <span class="page-link">{{ page_num }}{% if page_num == page_obj.number %} <span class="sr-only">(current)</span>{% endif %}</span>
-                          </li>
-                        {% else %}
-                          <li class="page-item {% if page_num == page_obj.number %} active {% endif %}">
-                              <a class="page-link" href="?page={{ page_num }}">{{ page_num }}{% if page_num == page_obj.number %} <span class="sr-only">(current)</span>{% endif %}</a>
-                          </li>
-                        {% endif %}
-                      {% endfor %}
-                      {% if page_obj.has_next %}
-                          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next"><span aria-hidden="true">&rsaquo;</span><span class="sr-only">Next</span></a></li>
-                      {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                          <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                      </li>
+                    {% endif %}
                   </ul>
               </nav>
+              
           </div>
       </div>    
       </div>  
-
       </div>
     </div>
   </div>
+  <script>
+    function activateWebhook(botId) {
+      $.ajax({
+          url: `/bot/setwebhook/${botId}/`,
+          type: 'GET',
+          dataType: 'json',
+          success: function(response) {
+              alert('Webhook activated successfully');
+              window.location.reload();
+          },
+          error: function(xhr, status, error) {
+              alert('Error activating webhook');
+              window.location.reload();
+          }
+      });
+  }
+  </script>
 {% endblock content %}

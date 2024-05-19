@@ -1,256 +1,190 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+{% extends "layouts/base.html" %}
 
-<!-- [ Main Content ] start -->
-<div class="col">
-  <div class="row">
-    <!-- PIE CHART -->
-    <div class="col-xl-6">
-      <div class="card">
-        <div class="card-header">
-          <h5>Most Requested Queries</h5>
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <!-- [ Main Content ] start -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card daily-sales">
+            <div class="card-block">
+                <h6 class="mb-4">Completed Projects</h6>
+                <div class="row d-flex align-items-center">
+                    <div class="col-9">
+                        <h3 class="f-w-300 d-flex align-items-center m-b-0"><i
+                                class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>
+                            2</h3>
+                    </div>
+
+                    <div class="col-3 text-right">
+                        
+                    </div>
+                </div>
+                <div class="progress m-t-30" style="height: 7px;">
+                    <div class="progress-bar progress-c-theme" role="progressbar"
+                            style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                </div>
+            </div>
         </div>
-        <div>
-          <canvas id="myDoughnutChart"/>
-        </div>
-      </div>
     </div>
-    <!-- PIE CHART - END -->
-
-    <div class="card">
-      <div class="card-header">
-        <h5>Metrics</h5>
-      </div>
-      <div class="col mx-3">
-        <!--INFO 1-->
-        <div class="card-block m-3">
-          <div class="row d-flex align-items-center">
-            <div class="col-auto mb-4">
-              <i class="feather icon-user f-30 text-c-green"></i>
+    <!--[ daily sales section ] end-->
+    <!--[ Monthly  sales section ] starts-->
+    <div class="col-md-6 col-xl-4">
+        <div class="card Monthly-sales">
+            <div class="card-block">
+                <h6 class="mb-4">Pending Projects</h6>
+                <div class="row d-flex align-items-center">
+                    <div class="col-9">
+                        <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i
+                                class="feather icon-arrow-down text-c-red f-30 m-r-10"></i>
+                                9</h3>
+                    </div>
+                    <div class="col-3 text-right">
+                        
+                    </div>
+                </div>
+                <div class="progress m-t-30" style="height: 7px;">
+                    <div class="progress-bar progress-c-theme2" role="progressbar"
+                            style="width: 35%;" aria-valuenow="35" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                </div>
             </div>
-            <div class="col">
-              <h3 class="f-w-300">235</h3>
-              <span class="d-block text-uppercase m-b-40">TOTAL USERS</span>
-            </div>
-          </div>
         </div>
-
-
-        <!--INFO 2-->
-        <div class="card-block m-3">
-          <div class="row d-flex align-items-center">
-            <div class="col-auto mb-4">
-              <i class="feather icon-zap f-30 text-c-blue"></i>
-            </div>
-            <div class="col">
-              <h3 class="f-w-300">235</h3>
-              <span class="d-block text-uppercase m-b-40">TOTAL QUERIES</span>
-            </div>
-          </div>
-        </div>
-
-        <!--INFO 3-->
-        <div class="card-block m-3">
-          <div class="row d-flex align-items-center">
-            <div class="col-auto mb-4">
-              <i class="feather icon-activity f-30 text-c-yellow"></i>
-            </div>
-            <div class="col">
-              <h3 class="f-w-300">235</h3>
-              <span class="d-block text-uppercase m-b-40">TOTAL QUERIES TODAY</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
     </div>
-  <div>
-  
-  <div class="row" style="margin-left:15px;">
-
-    <!-- GRAPH -->
-    <div class="card" style="width:528px">
-      <div class="card-header">
-        <h5>Weekly Stats</h5>
-      </div>
-      <canvas ="myLineChart" width="600" height="400"></canvas>
-    </div>
-
-    <!-- [ rating list ] starts-->
-    <div class="ml-3">
-      <div class="card user-list">
-        <div class="card-header">
-          <h5>Rating</h5>
+    <!--[ Monthly  sales section ] end-->
+    <!--[ year  sales section ] starts-->
+    <div class="col-md-12 col-xl-4">
+        <div class="card yearly-sales">
+            <div class="card-block">
+                <h6 class="mb-4">Employees</h6>
+                <div class="row d-flex align-items-center">
+                    <div class="col-9">
+                        <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i
+                                class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>
+                                200</h3>
+                    </div>
+                    <div class="col-3 text-right">
+                    </div>
+                </div>
+                <div class="m-t-30" style="height: 7px;">
+                    <div class="progress-bar progress-c-theme" role="progressbar"
+                            style="width: 70%;" aria-valuenow="70" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                </div>
+            </div>
         </div>
-        <div class="card-block">
-          <div class="row align-items-center justify-content-center m-b-20">
-            <div class="col-6">
-              <h2 class="f-w-300 d-flex align-items-center float-left m-0">
-                4.7 <i class="fas fa-star f-10 m-l-10 text-c-yellow"></i>
-              </h2>
-            </div>
-            <div class="col-6">
-              <h6 class="d-flex align-items-center float-right m-0">
-                0.4 <i class="fas fa-caret-up text-c-green f-22 m-l-10"></i>
-              </h6>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xl-12">
-              <h6 class="align-items-center float-left">
-                <i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>5
-              </h6>
-              <h6 class="align-items-center float-right">384</h6>
-              <div class="progress m-t-30 m-b-20" style="height: 6px">
-                <div
-                  class="progress-bar progress-c-theme"
-                  role="progressbar"
-                  style="width: 70%"
-                  aria-valuenow="70"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-            </div>
-            <div class="col-xl-12">
-              <h6 class="align-items-center float-left">
-                <i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>4
-              </h6>
-              <h6 class="align-items-center float-right">145</h6>
-              <div class="progress m-t-30 m-b-20" style="height: 6px">
-                <div
-                  class="progress-bar progress-c-theme"
-                  role="progressbar"
-                  style="width: 35%"
-                  aria-valuenow="35"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-            </div>
-            <div class="col-xl-12">
-              <h6 class="align-items-center float-left">
-                <i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>3
-              </h6>
-              <h6 class="align-items-center float-right">24</h6>
-              <div class="progress m-t-30 m-b-20" style="height: 6px">
-                <div
-                  class="progress-bar progress-c-theme"
-                  role="progressbar"
-                  style="width: 25%"
-                  aria-valuenow="25"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-            </div>
-            <div class="col-xl-12">
-              <h6 class="align-items-center float-left">
-                <i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>2
-              </h6>
-              <h6 class="align-items-center float-right">1</h6>
-              <div class="progress m-t-30 m-b-20" style="height: 6px">
-                <div
-                  class="progress-bar progress-c-theme"
-                  role="progressbar"
-                  style="width: 10%"
-                  aria-valuenow="10"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-            </div>
-            <div class="col-xl-12">
-              <h6 class="align-items-center float-left">
-                <i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>1
-              </h6>
-              <h6 class="align-items-center float-right">0</h6>
-              <div class="progress m-t-30 m-b-20" style="height: 6px">
-                <div
-                  class="progress-bar"
-                  role="progressbar"
-                  style="width: 0"
-                  aria-valuenow="0"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-    <!-- [ rating list ] end-->
-  </div>
 </div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card" style="min-height:400px;max-height:400px">
+          <div class="card-header">
+              <h5>Project Completion</h5>
+          </div>
+          <div class="card-block">
+              <canvas id="project-scatter-chart" style="min-height:240px;max-height:240px"></canvas>
+          </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card" style="min-height:400px;max-height:400px">
+          <div class="card-header">
+            <h5>This Years Projects</h5>
+          </div>
+          <div class="card-block d-flex justify-content-center align-items-center">
+            <canvas id="project-polar-chart"></canvas>
+          </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <h5>Your Tasks</h5>
+        <span class="d-block m-t-5">These are the <code>tasks</code> table </span>
+    </div>
+    <div class="card-block table-border-style">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Project Name</th>
+                        <th>Assigned to Team</th>
+                        <th>Status</th>
+                        <th>Updates</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <a href="#">
+                        <tr style="color:black">
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ task.task_name }}</td>
+                            <td>{{ task.assigned_to }}</td>
+                            
+                            <td>
+                                <div class="form-group">
+                                    <select name="task_status" onchange="updateTaskStatus('{{ task.id }}', this.value , '{{ csrf_token }}')" class="form-control-sm border rounded p-1 " style="background-color:#F4F7FA;" required="" id="id_task_status">
+                                        <option value="{{ task.task_status }}" selected="{{ task.get_task_status_display }}">{{ task.get_task_status_display }}</option>
+                                        {% if task.task_status != 'REV' %}
+                                            <option value="REV">Review</option>
+                                        {% endif %}
+                                        {% if task.task_status != 'INP' %}
+                                            <option value="INP">In Progress</option>
+                                        {% endif %}
+                                        {% if task.task_status != 'TOD' %}
+                                            <option value="TOD">TODO</option>
+                                        {% endif %}
+                                        {% if request.user.user_type != 'EM' and task.task_status != 'CMP' %}
+                                            <option value="CMP">Completed</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{% url 'tasks:task_updates' task.id %}" class="label theme-bg text-white f-12">Tasks Updates</a>
+                            </td>
+                        </tr>
+                    </a>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+  const ctx = document.getElementById('project-scatter-chart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
 
 
-  <div>
-    {% endblock content %} {% block extra_js %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
-    <script>
-      // Data setup For Pie chart
-      const dataP = {
-        labels: ["Red", "Blue", "Yellow"],
-        datasets: [
-          {
-            label: "My First Dataset",
-            data: [300, 50, 100],
-            backgroundColor: [
-              "rgb(255, 99, 132)",
-              "rgb(54, 162, 235)",
-              "rgb(255, 205, 86)",
-            ],
-            hoverOffset: 4,
-          },
-        ],
-      };
-  
-      // Configuration - PIE
-      const configP = {
-        type: "doughnut",
-        data: dataP,
-      };
-  
-      // Initialize the Pie Chart
-      const ctxP = document.getElementById("myDoughnutChart").getContext("2d");
-      new Chart(ctxP, configP);
-    </script>
-  
-    <script>
-      const labelsL = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-      ];
-      const dataL = {
-        labels: labelsL,
-        datasets: [
-          {
-            label: "My First Dataset",
-            data: [65, 59, 80, 81, 56, 55, 40],
-            fill: false,
-            borderColor: "rgb(75, 192, 192)",
-            tension: 0.1,
-          },
-        ],
-      };
-  
-      // Configuration - LINE
-      const configL = {
-        type: "line",
-        data: dataL,
-      };
-  
-      // Initialize the Line Chart
-      const ctxL = document.getElementById("myLineChart").getContext("2d");
-      new Chart(ctxL, configL);
-    </script>
-  
-    {% endblock extra_js %}
-  </div>
-  
+{% endblock javascripts %}
