@@ -94,7 +94,17 @@ class GeminiSystemInstructions:
             "You have to answer customer querry based on ZOMATO company data and related products",
             "For generic questions unrelated to ZOMATO company don't answer",
             "Give response in less than 40 words",
+            "You can find data related to ZOMATO in system instructions"
         ]
+
+    def generate_instruction(self, user_text):
+        client = QdrantClient(host=QDRANTDB_HOST, port=QDRANTDB_PORT)
+        embedding = GeminiLLM.generate_embeddings(text=user_text)
+        search_result = client.search(
+            collection_name="zomato_vector", query_vector=embedding, limit=6
+        )
+        results = [result.payload.get("data") for result in search_result]
+        return self.get_instruction_set() + results
 
 
 class GeminiLLM:
@@ -108,14 +118,16 @@ class GeminiLLM:
         self.model_configs = GeminiConfig().get_configs()
         self.model_safety_setting = GeminiSafetySettings().get_safety_settings()
         self.system_instruction = GeminiSystemInstructions().get_instruction_set()
-        self.model_init()
 
-    def model_init(self):
+    def model_init(self, system_instruction=None):
+        print(system_instruction)
         self.model = genai.GenerativeModel(
             model_name=self.model_name,
             generation_config=self.model_configs,
             safety_settings=self.model_safety_setting,
-            system_instruction=self.system_instruction,
+            system_instruction=(
+                system_instruction if system_instruction else self.system_instruction
+            ),
         )
 
     def get_conversation_history(self, chat_id, user_text):
@@ -125,27 +137,20 @@ class GeminiLLM:
             .values("message", "role")
             .order_by("-timestamp")[:10]
         )
-        client = QdrantClient(host=QDRANTDB_HOST, port=QDRANTDB_PORT)
-        embedding = GeminiLLM.generate_embeddings(text=user_text)
-        search_result = client.search(
-            collection_name="zomato_vector", query_vector=embedding, limit=2
-        )
-        results = [
-            {"parts": result.payload.get("data"), "role": "model"}
-            for result in search_result
-        ]
-        history = [
+        return [
             {
                 "parts": [item.get("message")],
                 "role": ConversationRole(item.get("role")).label,
             }
             for item in reversed(history)
         ]
-        history = results + history
-        logger.info(history)
-        return history
 
     def generate_response(self, chat_id, user_text):
+        self.model_init(
+            system_instruction=GeminiSystemInstructions().generate_instruction(
+                user_text
+            )
+        )
         conversation = self.model.start_chat(
             history=self.get_conversation_history(chat_id=chat_id, user_text=user_text)
         )

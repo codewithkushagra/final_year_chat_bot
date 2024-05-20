@@ -32,6 +32,10 @@ class SetWebhookView(View):
             bot = Bot.objects.get(id=bot_id)
         except Bot.DoesNotExist:
             return JsonResponse({"error": "Bot not found"}, status=404)
+        if bot.bot_url == None:
+            return JsonResponse(
+                {"message": "No bot URL provided"}, status=200
+            )
         try:
             response = requests.post(
                 f"{TELEGRAM_API_URL}{bot.bot_token}/setWebhook?url={bot.bot_url}/bot/getchats/{bot.id}/"
@@ -48,6 +52,30 @@ class SetWebhookView(View):
         else:
             return JsonResponse(
                 {"error": "Failed to set webhook", "details": response}, status=500
+            )
+
+    def delete(self, request, *args, **kwargs):
+        bot_id = kwargs.get("id")
+        try:
+            bot = Bot.objects.get(id=bot_id)
+        except Bot.DoesNotExist:
+            return JsonResponse({"error": "Bot not found"}, status=404)
+        try:
+            response = requests.post(
+                f"{TELEGRAM_API_URL}{bot.bot_token}/deleteWebhook"
+            ).json()
+        except requests.exceptions.RequestException as e:
+            return JsonResponse({"error": str(e)}, status=500)
+        print(response)
+        if response.get("ok"):
+            bot.status = BotStatus.INACTIVE
+            bot.save()
+            return JsonResponse(
+                {"message": "Webhook unset successfully", "details": response}, status=200
+            )
+        else:
+            return JsonResponse(
+                {"error": "Failed to unset webhook", "details": response}, status=500
             )
 
 

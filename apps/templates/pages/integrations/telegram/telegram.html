@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+  <meta name="csrf-token" content="{{ csrf_token }}">
   <div class="container">
     <div class="row justify-content-between align-items-center">
       <!-- Page Header on the left -->
@@ -71,18 +72,16 @@
                                 </td>
                                   {% if bot.status == 'inactive' %}
                                     <td>
-                                      <button type="button" class="btn btn-primary py-1 px-2" onclick="activateWebhook({{ bot.id }})" title="View Bot Details" data-toggle="tooltip">
+                                      <button type="button" class="btn btn-primary py-1 px-2" onclick="activateWebhook({{ bot.id }})" title="Activate" data-toggle="tooltip">
                                           Activate
                                       </button>
                                     </td>
                                   {% endif %}
                                   {% if bot.status == 'active' %}
                                     <td>
-                                        <a href="#">
-                                            <button type="button" class="btn btn-primary py-1 px-2" title="View Bot Details" data-toggle="tooltip">
-                                                Deactivate
-                                            </button>
-                                        </a> 
+                                      <button type="button" class="btn btn-primary py-1 px-2" onclick="deactivateWebhook({{ bot.id }})" title="Deactivate" data-toggle="tooltip">
+                                          Deactivate
+                                      </button>
                                     </td>
                                   {% endif %}
                           </tr>
@@ -140,14 +139,45 @@
           type: 'GET',
           dataType: 'json',
           success: function(response) {
-              alert('Webhook activated successfully');
+              alert(response.message);
               window.location.reload();
           },
           error: function(xhr, status, error) {
-              alert('Error activating webhook');
+              if(xhr.message){
+                alert(xhr.message);
+              }
+              else{
+                alert("Something went wrong");
+              }
               window.location.reload();
           }
       });
-  }
+    }
+    function getCsrfToken() {
+      return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+    function deactivateWebhook(botId) {
+      $.ajax({
+          url: `/bot/setwebhook/${botId}/`,
+          type: 'DELETE',
+          dataType: 'json',
+          headers: {
+            'X-CSRFToken': getCsrfToken()
+          },
+          success: function(response) {
+              alert(response.message);
+              window.location.reload();
+          },
+          error: function(xhr, status, error) {
+              if(xhr.message){
+                alert(xhr.message);
+              }
+              else{
+                alert("Something went wrong");
+              }
+              window.location.reload();
+          }
+      });
+    }
   </script>
 {% endblock content %}
