@@ -81,27 +81,35 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-xl-6">
-        <div class="card" style="min-height:400px;max-height:400px">
-          <div class="card-header">
-              <h5>Project Completion</h5>
-          </div>
-          <div class="card-block">
-              <canvas id="project-scatter-chart" style="min-height:240px;max-height:240px"></canvas>
-          </div>
+  <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header">
+            <h5>Project Completion</h5>
         </div>
-    </div>
-    <div class="col-xl-6">
-        <div class="card" style="min-height:400px;max-height:400px">
-          <div class="card-header">
-            <h5>This Years Projects</h5>
-          </div>
-          <div class="card-block d-flex justify-content-center align-items-center">
-            <canvas id="project-polar-chart"></canvas>
-          </div>
+        <div class="card-block">
+            <canvas id="myDoughnutChart" class="chart-canvas" width="400" height="400"></canvas>
         </div>
-    </div>
+      </div>
+  </div>
+  <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header">
+          <h5>This Years Projects</h5>
+        </div>
+        <div class="card-block">
+          <canvas id="myLineChart" class="chart-canvas" width="400" height="400"></canvas>
+        </div>
+      </div>
+  </div>
 </div>
+
+<style>
+  .chart-canvas {
+      width: 100% !important;
+      height: 470px !important;
+  }
+</style>
+
 <div class="card">
     <div class="card-header">
         <h5>Your Tasks</h5>
@@ -159,32 +167,73 @@
 </div>
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-<script>
-  const ctx = document.getElementById('project-scatter-chart');
+{% block extra_js %}
+<div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      // Data setup For Doughnut chart
+      const dataP = {
+        labels: ["Red", "Blue", "Yellow"],
+        datasets: [
+          {
+            label: "My First Dataset",
+            data: [300, 50, 100],
+            backgroundColor: [
+              "rgb(255, 99, 132)",
+              "rgb(54, 162, 235)",
+              "rgb(255, 205, 86)",
+            ],
+            hoverOffset: 4,
+          },
+        ],
+      };
 
+      // Configuration - Doughnut
+      const configP = {
+        type: "doughnut",
+        data: dataP,
+      };
 
-{% endblock javascripts %}
+      // Initialize the Doughnut Chart
+      const ctxP = document.getElementById("myDoughnutChart").getContext("2d");
+      new Chart(ctxP, configP);
+
+      // Data setup For Line chart
+      const labelsL = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+      ];
+      const dataL = {
+        labels: labelsL,
+        datasets: [
+          {
+            label: "My First Dataset",
+            data: [65, 59, 80, 81, 56, 55, 40],
+            fill: false,
+            borderColor: "rgb(75, 192, 192)",
+            tension: 0.1,
+          },
+        ],
+      };
+
+      // Configuration - Line
+      const configL = {
+        type: "line",
+        data: dataL,
+      };
+
+      // Initialize the Line Chart
+      const ctxL = document.getElementById("myLineChart").getContext("2d");
+      new Chart(ctxL, configL);
+    });
+  </script>
+</div>
+{% endblock extra_js %}
